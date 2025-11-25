@@ -27,3 +27,14 @@ openssl genrsa -out server.key 2048
 # 2. 生成证书 (server.crt)
 # 提示输入信息时，Common Name 填你的域名或随便填，其他可以直接回车
 openssl req -new -x509 -key server.key -out server.crt -days 3650
+
+# docker构建
+## 1. 清理旧的(如果有必要)
+docker rm -f my-tunnel
+docker rmi mytunnel-server
+
+## 2. 构建 (注意最后有个点)
+docker build -t mytunnel-server .
+
+## 3. 运行
+docker run -d --restart=always --name my-tunnel -p 7000:7000 -p 8080:8080 mytunnel-server
